@@ -29,8 +29,10 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import me.sizableshrimp.adventofcode2022.helper.ListConvert;
 import me.sizableshrimp.adventofcode2022.helper.Processor;
 import me.sizableshrimp.adventofcode2022.templates.Day;
+import one.util.streamex.IntStreamEx;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 // https://adventofcode.com/2022/day/1 - Calorie Counting
@@ -58,7 +60,7 @@ public class Day01 extends Day {
     protected void parse() {
         this.inventories = new ArrayList<>();
 
-        for (List<String> inventory : Processor.split(this.lines, String::isBlank)) {
+        for (List<String> inventory : Processor.splitBlankLines(this.lines)) {
             this.inventories.add(ListConvert.ints(inventory));
         }
     }

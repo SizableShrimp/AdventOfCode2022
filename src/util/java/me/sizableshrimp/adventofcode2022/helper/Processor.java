@@ -91,6 +91,10 @@ public class Processor {
         return split(length, i -> splitter.test(list.get(i)), list::subList).toList();
     }
 
+    public static List<List<String>> splitBlankLines(List<String> list) {
+        return split(list, String::isBlank);
+    }
+
     private static <T> Stream<T> split(int length, IntPredicate splitter, BiFunction<Integer, Integer, T> func) {
         List<Integer> indices = new ArrayList<>();
         indices.add(-1);
