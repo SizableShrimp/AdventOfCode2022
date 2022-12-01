@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+}
+
+group 'me.sizableshrimp.adventofcode2022'
+version '0.1.0'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(18)
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    util
+}
+
+configurations {
+    implementation.extendsFrom utilImplementation
+    animationProcessor.extendsFrom utilAnnotationProcessor
+    runtimeOnly.extendsFrom utilRuntimeOnly
+    compileOnly.extendsFrom utilCompileOnly
+}
+
+dependencies {
+    implementation sourceSets.util.output
+    utilImplementation 'org.projectlombok:lombok:1.18.24'
+    utilAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    utilImplementation 'one.util:streamex:0.8.1'
+    utilImplementation 'com.google.guava:guava:31.1-jre'
+    utilImplementation 'it.unimi.dsi:fastutil:8.5.9'
+    // implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+
+    testImplementation 'org.openjdk.jmh:jmh-core:1.35'
+    testAnnotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
+}
+
+task jmh(type: JavaExec, dependsOn: testClasses) {
+    mainClass = 'org.openjdk.jmh.Main'
+    classpath = sourceSets.test.compileClasspath + sourceSets.test.runtimeClasspath
+    def toolchain = project.extensions.getByType(JavaPluginExtension.class).toolchain
+    def service = project.extensions.getByType(JavaToolchainService.class)
+    javaLauncher = service.launcherFor(toolchain)
+}
