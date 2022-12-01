@@ -33,7 +33,6 @@ import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -89,8 +88,7 @@ public class Processor {
     // Splits
     public static <T> List<List<T>> split(List<T> list, Predicate<T> splitter) {
         int length = list.size();
-        return split(length, i -> splitter.test(list.get(i)), list::subList)
-                .collect(Collectors.toList());
+        return split(length, i -> splitter.test(list.get(i)), list::subList).toList();
     }
 
     private static <T> Stream<T> split(int length, IntPredicate splitter, BiFunction<Integer, Integer, T> func) {
@@ -115,7 +113,7 @@ public class Processor {
     public static <T> List<T[]> split(T[] arr, Predicate<T> splitter) {
         return split(arr.length, i -> splitter.test(arr[i]),
                 (a, b) -> Arrays.copyOfRange(arr, a, b))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static <T> Stream<Stream<T>> splitStream(T[] arr, Predicate<T> splitter) {

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 //see Python Itertools
@@ -88,7 +87,7 @@ public class Itertools {
         while (true) {
             boolean broke = false;
             int last = 0;
-            for (int i : IntStream.range(0, r).mapToObj(i -> r - i - 1).collect(Collectors.toList())) {
+            for (int i : IntStream.range(0, r).mapToObj(i -> r - i - 1).toList()) {
                 last = i;
                 if (indices[i] != i + n - r) {
                     broke = true;

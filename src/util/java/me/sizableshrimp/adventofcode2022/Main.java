@@ -111,6 +111,7 @@ public class Main {
                     // Thread.sleep(rand * 1000L);
                     Thread.sleep(5_000L);
                     DataManager.read(dayOfMonth);
+                    System.out.println("Downloaded input file");
                     break;
                 }
                 Thread.sleep(1000);

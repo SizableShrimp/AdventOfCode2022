@@ -25,7 +25,6 @@ package me.sizableshrimp.adventofcode2022.helper;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ArrayConvert {
@@ -66,7 +65,7 @@ public class ArrayConvert {
 
     public static boolean[] booleans(List<String> list) {
         // No BooleanStream type :(
-        List<Boolean> boxed = convert(list, Boolean::valueOf).collect(Collectors.toList());
+        List<Boolean> boxed = convert(list, Boolean::valueOf).toList();
         return unboxBooleans(boxed);
     }
 
@@ -82,7 +81,7 @@ public class ArrayConvert {
         // No CharStream type :(
         List<Character> boxed = list.stream()
                 .flatMap(s -> LineConvert.chars(s).stream())
-                .collect(Collectors.toList());
+                .toList();
         return unboxChars(boxed);
     }
 

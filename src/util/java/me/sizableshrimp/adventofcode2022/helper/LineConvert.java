@@ -32,7 +32,6 @@ import me.sizableshrimp.adventofcode2022.templates.Coordinate;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class LineConvert {
     public static final Pattern NUMBER = Pattern.compile("-?\\d+");
@@ -74,7 +73,7 @@ public class LineConvert {
     public static List<Character> chars(String s) {
         return s.chars()
                 .mapToObj(i -> (char) i)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static Coordinate coordinate(String coord) {

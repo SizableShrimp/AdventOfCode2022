@@ -49,10 +49,13 @@ public abstract class Day {
      * the Advent Of Code servers to request the input data. See {@link DataManager#read} for more details.
      */
     protected List<String> lines = DataManager.read(Integer.parseInt(getClass().getSimpleName().substring(3)));
-    // /**
-    //  * The raw file input, denoting lines by <b>Unix-style endings</b> or <code>\n</code>.
-    //  */
-    // protected String raw = String.join("\n", lines);
+
+    /**
+     * @return the raw file input, denoting lines by <b>Unix-style endings</b> or <code>\n</code>
+     */
+    protected String getRawInput() {
+        return String.join("\n", this.lines);
+    }
 
     /**
      * Execute a given day; printing out part 1, part 2, and the time taken.
