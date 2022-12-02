@@ -23,43 +23,28 @@
 
 package me.sizableshrimp.adventofcode2022.days;
 
-import it.unimi.dsi.fastutil.ints.IntAVLTreeSet;
-import it.unimi.dsi.fastutil.ints.IntComparators;
-import it.unimi.dsi.fastutil.ints.IntList;
-import me.sizableshrimp.adventofcode2022.helper.ListConvert;
-import me.sizableshrimp.adventofcode2022.helper.Processor;
 import me.sizableshrimp.adventofcode2022.templates.Day;
 
-import java.util.ArrayList;
-import java.util.List;
-
-// https://adventofcode.com/2022/day/1 - Calorie Counting
-public class Day01 extends Day {
-    private final IntAVLTreeSet maxCalories = new IntAVLTreeSet(IntComparators.NATURAL_COMPARATOR.reversed());
-    private List<IntList> inventories;
-
+// https://adventofcode.com/2022/day/2 - Rock Paper Scissors
+public class Day02 extends Day {
     public static void main(String[] args) {
-        new Day01().run();
+        new Day02().run();
     }
 
     @Override
     protected Result evaluate() {
-        this.maxCalories.clear();
+        int totalPart1 = 0;
+        int totalPart2 = 0;
 
-        for (IntList inventory : this.inventories) {
-            int totalCalories = inventory.intStream().sum();
-            this.maxCalories.add(totalCalories);
+        for (String line : lines) {
+            // "ABC"
+            int opponent = line.charAt(0) - 'A';
+            // "XYZ"
+            int me = line.charAt(2) - 'X';
+            totalPart1 += me + 1 + Math.floorMod(me - opponent + 1, 3) * 3;
+            totalPart2 += me * 3 + Math.floorMod(opponent + me - 1, 3) + 1;
         }
 
-        return Result.of(this.maxCalories.firstInt(), this.maxCalories.intStream().limit(3).sum());
-    }
-
-    @Override
-    protected void parse() {
-        this.inventories = new ArrayList<>();
-
-        for (List<String> inventory : Processor.splitOnBlankLines(this.lines)) {
-            this.inventories.add(ListConvert.ints(inventory));
-        }
+        return Result.of(totalPart1, totalPart2);
     }
 }

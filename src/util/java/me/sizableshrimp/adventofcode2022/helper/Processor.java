@@ -91,7 +91,7 @@ public class Processor {
         return split(length, i -> splitter.test(list.get(i)), list::subList).toList();
     }
 
-    public static List<List<String>> splitBlankLines(List<String> list) {
+    public static List<List<String>> splitOnBlankLines(List<String> list) {
         return split(list, String::isBlank);
     }
 
