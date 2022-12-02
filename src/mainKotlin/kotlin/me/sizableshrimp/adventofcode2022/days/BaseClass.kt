@@ -21,30 +21,19 @@
  * SOFTWARE.
  */
 
-package me.sizableshrimp.adventofcode2022.days;
+package me.sizableshrimp.adventofcode2022.days
 
-import me.sizableshrimp.adventofcode2022.templates.Day;
+import me.sizableshrimp.adventofcode2022.templates.Day
 
-// https://adventofcode.com/2022/day/2 - Rock Paper Scissors
-public class Day02 extends Day {
-    public static void main(String[] args) {
-        new Day02().run();
+class BaseClass : Day() {
+    override fun evaluate(): Result {
+        return Result.of(null, null)
     }
 
-    @Override
-    protected Result evaluate() {
-        int totalPart1 = 0;
-        int totalPart2 = 0;
-
-        for (String line : lines) {
-            // "ABC"
-            int opponent = line.charAt(0) - 'A';
-            // "XYZ"
-            int me = line.charAt(2) - 'X';
-            totalPart1 += me + 1 + Math.floorMod(me - opponent + 1, 3) * 3;
-            totalPart2 += me * 3 + Math.floorMod(me + opponent - 1, 3) + 1;
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            BaseClass().run()
         }
-
-        return Result.of(totalPart1, totalPart2);
     }
 }

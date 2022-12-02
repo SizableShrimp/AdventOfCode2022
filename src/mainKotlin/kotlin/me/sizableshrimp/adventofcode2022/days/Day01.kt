@@ -21,30 +21,33 @@
  * SOFTWARE.
  */
 
-package me.sizableshrimp.adventofcode2022.days;
+package me.sizableshrimp.adventofcode2022.days
 
-import me.sizableshrimp.adventofcode2022.templates.Day;
+import it.unimi.dsi.fastutil.ints.IntList
+import me.sizableshrimp.adventofcode2022.util.splitOnBlankLines
+import me.sizableshrimp.adventofcode2022.templates.Day
+import me.sizableshrimp.adventofcode2022.util.toInts
 
-// https://adventofcode.com/2022/day/2 - Rock Paper Scissors
-public class Day02 extends Day {
-    public static void main(String[] args) {
-        new Day02().run();
+// https://adventofcode.com/2022/day/1 - Calorie Counting
+class Day01 : Day() {
+    private val inventories = ArrayList<IntList>()
+
+    override fun evaluate(): Result {
+        val maxCalories = this.inventories.map { it.sum() }.sortedDescending().take(3)
+
+        return Result.of(maxCalories[0], maxCalories.sum())
     }
 
-    @Override
-    protected Result evaluate() {
-        int totalPart1 = 0;
-        int totalPart2 = 0;
+    override fun parse() {
+        this.inventories.clear()
 
-        for (String line : lines) {
-            // "ABC"
-            int opponent = line.charAt(0) - 'A';
-            // "XYZ"
-            int me = line.charAt(2) - 'X';
-            totalPart1 += me + 1 + Math.floorMod(me - opponent + 1, 3) * 3;
-            totalPart2 += me * 3 + Math.floorMod(me + opponent - 1, 3) + 1;
+        this.lines.splitOnBlankLines().forEach { this.inventories.add(it.toInts()) }
+    }
+
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            Day01().run()
         }
-
-        return Result.of(totalPart1, totalPart2);
     }
 }

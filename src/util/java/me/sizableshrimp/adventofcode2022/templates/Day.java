@@ -48,7 +48,7 @@ public abstract class Day {
      * <b>NOTE:</b> This variable is assigned using {@link DataManager#read}, which means it has the possibility to hit
      * the Advent Of Code servers to request the input data. See {@link DataManager#read} for more details.
      */
-    protected List<String> lines = DataManager.read(Integer.parseInt(getClass().getSimpleName().substring(3)));
+    protected final List<String> lines = DataManager.read(Integer.parseInt(getClass().getSimpleName().substring(3)));
 
     /**
      * @return the raw file input, denoting lines by <b>Unix-style endings</b> or <code>\n</code>
