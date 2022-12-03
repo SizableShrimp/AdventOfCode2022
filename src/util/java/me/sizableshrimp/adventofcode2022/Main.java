@@ -76,7 +76,7 @@ public class Main {
 
         LocalDateTime time = LocalDateTime.now(AOCUtil.EST_ZONE_ID);
         int dayOfMonth = time.getDayOfMonth();
-        if (time.getMonth() == Month.DECEMBER && dayOfMonth <= 25) {
+        if (time.getYear() == AOCUtil.YEAR && time.getMonth() == Month.DECEMBER && dayOfMonth <= 25) {
             run(dayOfMonth);
         } else {
             runAll();

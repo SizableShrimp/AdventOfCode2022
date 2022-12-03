@@ -30,8 +30,8 @@ import java.time.ZoneId;
 public class AOCUtil {
     /**
      * The hardcoded Advent Of Code year.
-     * This year integer is only used for retrieving data from the AOC servers with {@link DataManager#read}.
-     * Otherwise, it is useless.
+     * This year integer is used for retrieving data from the AOC servers with {@link DataManager#read}
+     * and running a day during the competition.
      */
     public static final int YEAR = 2022;
     /**

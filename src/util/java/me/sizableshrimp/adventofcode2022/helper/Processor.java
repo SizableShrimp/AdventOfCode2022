@@ -124,4 +124,34 @@ public class Processor {
         return split(arr.length, i -> splitter.test(arr[i]),
                 (a, b) -> Arrays.stream(Arrays.copyOfRange(arr, a, b)));
     }
+
+    /**
+     * Creates a list of subgroups based on the original collection using the given size per subgroup.
+     *
+     * @param collection the base collection
+     * @param windowSize how large to make each subgroup
+     * @param allowTrailing whether any trailing elements which do not match the subgroup size should be added to the list
+     * @return a list of subgroups
+     * @param <T> the type of the collection
+     */
+    public static <T> List<List<T>> createSubGroups(Collection<T> collection, int windowSize, boolean allowTrailing) {
+        List<List<T>> windows = new ArrayList<>(collection.size() / windowSize);
+        List<T> currList = null;
+
+        for (T t : collection) {
+            if (currList != null && currList.size() == windowSize) {
+                windows.add(currList);
+                currList = new ArrayList<>();
+            } else if (currList == null) {
+                currList = new ArrayList<>();
+            }
+
+            currList.add(t);
+        }
+
+        if (currList != null && (allowTrailing || currList.size() == windowSize))
+            windows.add(currList);
+
+        return windows;
+    }
 }

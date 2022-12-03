@@ -25,7 +25,7 @@ package me.sizableshrimp.adventofcode2022.days
 
 import me.sizableshrimp.adventofcode2022.templates.Day
 
-class BaseClass : Day() {
+class BaseClassKotlin : Day() {
     override fun evaluate(): Result {
         return Result.of(null, null)
     }
@@ -33,7 +33,7 @@ class BaseClass : Day() {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            BaseClass().run()
+            BaseClassKotlin().run()
         }
     }
 }
