@@ -1,5 +1,5 @@
 # AdventOfCode2022
-This repository holds my solutions and helper code (in Java) for [Advent Of Code 2022](https://adventofcode.com/2022).
+This repository holds my solutions and helper code (in Java/Kotlin) for [Advent Of Code 2022](https://adventofcode.com/2022).
 Usually, what I push to GitHub is fully formed and semi-optimized.
 
 ### Running A Specific Day
