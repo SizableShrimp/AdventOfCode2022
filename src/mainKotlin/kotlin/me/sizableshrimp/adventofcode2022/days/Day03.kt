@@ -25,6 +25,7 @@ package me.sizableshrimp.adventofcode2022.days
 
 import me.sizableshrimp.adventofcode2022.templates.SeparatedDay
 
+// https://adventofcode.com/2022/day/3 - Rucksack Reorganization
 class Day03 : SeparatedDay() {
     override fun part1() = this.lines.sumOf {
         val middle = it.length / 2

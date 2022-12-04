@@ -23,11 +23,7 @@
 
 package me.sizableshrimp.adventofcode2022.days;
 
-import me.sizableshrimp.adventofcode2022.helper.MatchWrapper;
-import me.sizableshrimp.adventofcode2022.helper.Parser;
 import me.sizableshrimp.adventofcode2022.templates.Day;
-
-import java.util.regex.Pattern;
 
 // https://adventofcode.com/2022/day/4 - Camp Cleanup
 public class Day04 extends Day {
@@ -50,7 +46,7 @@ public class Day04 extends Day {
             int bEnd = Integer.parseInt(pair2Nums[1]);
             if (aStart <= bStart && bEnd <= aEnd || bStart <= aStart && aEnd <= bEnd)
                 part1Count++;
-            if (aStart <= bStart && bStart <= aEnd || bStart <= aStart && aStart <= bEnd)
+            if (aStart <= bEnd && bStart <= aEnd)
                 part2Count++;
         }
 

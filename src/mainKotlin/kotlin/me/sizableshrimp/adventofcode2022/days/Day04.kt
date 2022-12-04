@@ -25,6 +25,7 @@ package me.sizableshrimp.adventofcode2022.days
 
 import me.sizableshrimp.adventofcode2022.templates.Day
 
+// https://adventofcode.com/2022/day/4 - Camp Cleanup
 class Day04 : Day() {
     override fun evaluate(): Result {
         var part1Count = 0
@@ -41,7 +42,7 @@ class Day04 : Day() {
             val bEnd = pair2[1].toInt()
 
             if (aStart <= bStart && bEnd <= aEnd || bStart <= aStart && aEnd <= bEnd) part1Count++
-            if (bStart in aStart..aEnd || aStart in bStart..bEnd) part2Count++
+            if (aStart <= bEnd && bStart <= aEnd) part2Count++
         }
 
         return Result.of(part1Count, part2Count)
