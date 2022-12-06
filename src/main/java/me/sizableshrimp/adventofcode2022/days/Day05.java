@@ -57,16 +57,19 @@ public class Day05 extends SeparatedDay {
         }
 
         for (Move move : this.moves) {
-            CharList from = state.get(move.from);
-            CharList to = state.get(move.to);
+            CharList from = state.get(move.fromIdx);
+            CharList to = state.get(move.toIdx);
+            int count = move.count;
+            int size = from.size();
+
             if (moveExact) {
-                int idx = from.size() - move.count;
-                for (int i = 0; i < move.count; i++) {
+                int idx = size - count;
+                for (int i = 0; i < count; i++) {
                     to.add(from.removeChar(idx));
                 }
             } else {
-                for (int i = 0; i < move.count; i++) {
-                    to.add(from.removeChar(from.size() - 1));
+                for (int i = 0; i < count; i++) {
+                    to.add(from.removeChar(size - i - 1));
                 }
             }
         }
@@ -108,5 +111,5 @@ public class Day05 extends SeparatedDay {
         }
     }
 
-    private record Move(int from, int to, int count) {}
+    private record Move(int fromIdx, int toIdx, int count) {}
 }
