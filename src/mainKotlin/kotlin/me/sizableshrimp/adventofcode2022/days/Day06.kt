@@ -25,6 +25,7 @@ package me.sizableshrimp.adventofcode2022.days
 
 import me.sizableshrimp.adventofcode2022.templates.SeparatedDay
 
+// https://adventofcode.com/2022/day/6 - Tuning Trouble
 class Day06 : SeparatedDay() {
     private val packet = this.lines[0]
 
