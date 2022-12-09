@@ -68,6 +68,9 @@ public class Coordinate {
      * @return A new {@link Coordinate} made from adding the offset-x to the base x and offset-y to the base y.
      */
     public Coordinate resolve(int x, int y) {
+        if (x == 0 && y == 0)
+            return this;
+
         return new Coordinate(this.x + x, this.y + y);
     }
 
@@ -76,6 +79,9 @@ public class Coordinate {
     }
 
     public Coordinate multiply(int xFactor, int yFactor) {
+        if (xFactor == 1 && yFactor == 1)
+            return this;
+
         return new Coordinate(this.x * xFactor, this.y * yFactor);
     }
 
