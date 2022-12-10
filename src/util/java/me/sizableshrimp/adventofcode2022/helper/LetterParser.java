@@ -81,6 +81,14 @@ public class LetterParser {
         return letters.indexOf('?') == -1 ? letters : letters + "\n" + Printer.toString(coords, (contains, coord) -> contains ? "██" : "  ");
     }
 
+    /**
+     * @return the letters in the grid, additionally appending a display of the grid if a letter cannot be parsed.
+     */
+    public static String getLettersOrGrid(boolean[][] grid) {
+        String letters = getLetters(grid);
+        return letters.indexOf('?') == -1 ? letters : letters + "\n" + Printer.toString(grid, b -> b ? "██" : "  ");
+    }
+
     public static String getLetters(Collection<Coordinate> coords) {
         int minX = Integer.MAX_VALUE;
         int minY = Integer.MAX_VALUE;
@@ -104,6 +112,20 @@ public class LetterParser {
         return builder.toString();
     }
 
+    public static String getLetters(boolean[][] grid) {
+        int minX = 0;
+        int minY = 0;
+        int maxX = grid[0].length - 1;
+
+        StringBuilder builder = new StringBuilder();
+
+        for (int x = minX; x <= maxX; x += 5) {
+            builder.append(getLetter(x, minY, grid));
+        }
+
+        return builder.toString();
+    }
+
     public static char getLetter(int xOffset, int yOffset, Collection<Coordinate> coords) {
         int id = 0;
 
@@ -112,6 +134,21 @@ public class LetterParser {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (coords.contains(Coordinate.of(xOffset + x, yOffset + y)))
+                    id |= 1 << ((height - y) * width - x - 1);
+            }
+        }
+
+        return LETTER_MAP.getOrDefault(id, '?');
+    }
+
+    public static char getLetter(int xOffset, int yOffset, boolean[][] grid) {
+        int id = 0;
+
+        int height = 6;
+        int width = 5;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (/*GridHelper.isValid(grid, xOffset + x, yOffset + y) && */grid[yOffset + y][xOffset + x])
                     id |= 1 << ((height - y) * width - x - 1);
             }
         }

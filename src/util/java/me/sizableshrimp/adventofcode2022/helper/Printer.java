@@ -23,7 +23,7 @@
 
 package me.sizableshrimp.adventofcode2022.helper;
 
-import it.unimi.dsi.fastutil.booleans.Boolean2CharFunction;
+import it.unimi.dsi.fastutil.booleans.Boolean2ObjectFunction;
 import me.sizableshrimp.adventofcode2022.templates.Coordinate;
 import me.sizableshrimp.adventofcode2022.templates.EnumState;
 
@@ -120,10 +120,10 @@ public class Printer {
     }
 
     public static String toString(boolean[][] grid) {
-        return toString(grid, b -> b ? '#' : '.');
+        return toString(grid, b -> b ? "#" : ".");
     }
 
-    public static String toString(boolean[][] grid, Boolean2CharFunction function) {
+    public static String toString(boolean[][] grid, Boolean2ObjectFunction<String> function) {
         StringBuilder builder = new StringBuilder();
 
         for (boolean[] row : grid) {
