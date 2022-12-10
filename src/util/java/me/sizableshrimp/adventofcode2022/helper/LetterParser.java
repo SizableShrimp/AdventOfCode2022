@@ -36,6 +36,8 @@ public class LetterParser {
     static {
         Int2CharMap letterMap = new Int2CharOpenHashMap();
 
+        // Could import https://github.com/mstksg/advent-of-code-ocr/blob/main/src/Advent/OCR/LetterMap.hs#L227
+
         // Similar to https://fontstruct.com/fontstructions/show/1650758/4x6-font
         // Similar to https://community.arduboy.com/t/4x6-font-for-the-arduboy/5589
         // Not exact copies; there are unique ones in here from checking outputs
@@ -60,7 +62,8 @@ public class LetterParser {
         letterMap.put(0b01100_10010_10010_10010_10100_01010, 'Q'); // Guess
         letterMap.put(0b11100_10010_10010_11100_10100_10010, 'R');
         letterMap.put(0b01110_10000_01100_00010_00010_11100, 'S'); // Guess
-        letterMap.put(0b01110_10000_01100_00010_00010_11100, 'T'); // Guess
+        letterMap.put(0b11100_01000_01000_01000_01000_01000, 'T'); // Guess - width 3 T
+        letterMap.put(0b11111_00100_00100_00100_00100_00100, 'T'); // Guess - width 5 T
         letterMap.put(0b10010_10010_10010_10010_10010_01100, 'U');
         // V
         // W
@@ -133,8 +136,9 @@ public class LetterParser {
         int width = 5;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
+                id <<= 1;
                 if (coords.contains(Coordinate.of(xOffset + x, yOffset + y)))
-                    id |= 1 << ((height - y) * width - x - 1);
+                    id++;
             }
         }
 
@@ -148,8 +152,9 @@ public class LetterParser {
         int width = 5;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
+                id <<= 1;
                 if (/*GridHelper.isValid(grid, xOffset + x, yOffset + y) && */grid[yOffset + y][xOffset + x])
-                    id |= 1 << ((height - y) * width - x - 1);
+                    id++;
             }
         }
 
