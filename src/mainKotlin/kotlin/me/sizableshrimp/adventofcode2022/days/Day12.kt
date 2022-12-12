@@ -29,7 +29,7 @@ import me.sizableshrimp.adventofcode2022.helper.GridHelper
 import me.sizableshrimp.adventofcode2022.templates.Coordinate
 import me.sizableshrimp.adventofcode2022.templates.Day
 import me.sizableshrimp.adventofcode2022.templates.Direction
-import java.util.PriorityQueue
+import java.util.ArrayDeque
 import java.util.Queue
 
 // https://adventofcode.com/2022/day/12 - Hill Climbing Algorithm
@@ -40,7 +40,7 @@ class Day12 : Day() {
 
     override fun evaluate(): Result? {
         val steps = Object2IntOpenHashMap<Coordinate>()
-        val queue = PriorityQueue<Coordinate>(Comparator.comparingInt { it.distance(this.end) })
+        val queue = ArrayDeque<Coordinate>()
         queue.add(this.start)
 
         val part1 = findShortestPath(steps, queue)

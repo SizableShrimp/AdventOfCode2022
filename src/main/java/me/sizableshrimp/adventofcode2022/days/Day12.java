@@ -30,8 +30,7 @@ import me.sizableshrimp.adventofcode2022.templates.Coordinate;
 import me.sizableshrimp.adventofcode2022.templates.Day;
 import me.sizableshrimp.adventofcode2022.templates.Direction;
 
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.ArrayDeque;
 import java.util.Queue;
 
 // https://adventofcode.com/2022/day/12 - Hill Climbing Algorithm
@@ -47,7 +46,7 @@ public class Day12 extends Day {
     @Override
     protected Result evaluate() {
         Object2IntMap<Coordinate> steps = new Object2IntOpenHashMap<>();
-        Queue<Coordinate> queue = new PriorityQueue<>(Comparator.comparingInt(coord -> coord.distance(end)));
+        Queue<Coordinate> queue = new ArrayDeque<>();
         queue.add(this.start);
 
         int part1 = findShortestPath(steps, queue);
