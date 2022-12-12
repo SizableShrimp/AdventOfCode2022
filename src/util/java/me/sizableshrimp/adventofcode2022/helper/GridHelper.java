@@ -151,6 +151,21 @@ public class GridHelper {
         return grid;
     }
 
+    public static Coordinate findCoordinate(List<String> lines, char targetChar) {
+        for (int y = 0; y < lines.size(); y++) {
+            String line = lines.get(y);
+            int lineLength = line.length();
+
+            for (int x = 0; x < lineLength; x++) {
+                char c = line.charAt(x);
+                if (c == targetChar)
+                    return Coordinate.of(x, y);
+            }
+        }
+
+        throw new IllegalStateException();
+    }
+
     public static <T> void print(T[][] grid) {
         System.out.print(Printer.toString(grid));
     }
