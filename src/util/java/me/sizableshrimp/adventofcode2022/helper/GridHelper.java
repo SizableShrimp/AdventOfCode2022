@@ -30,6 +30,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectFunction;
 import it.unimi.dsi.fastutil.chars.CharPredicate;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import me.sizableshrimp.adventofcode2022.templates.Coordinate;
+import me.sizableshrimp.adventofcode2022.templates.Direction;
 import me.sizableshrimp.adventofcode2022.templates.EnumState;
 
 import java.lang.reflect.Array;
@@ -211,12 +212,20 @@ public class GridHelper {
         return result;
     }
 
+    public static <T> boolean isValid(T[][] grid, Coordinate base, Direction offset) {
+        return isValid(grid, base.x + offset.x, base.y + offset.y);
+    }
+
     public static <T> boolean isValid(T[][] grid, Coordinate coord) {
         return isValid(grid, coord.x, coord.y);
     }
 
     public static <T> boolean isValid(T[][] grid, int x, int y) {
         return isValid(x, y, grid[0].length, grid.length);
+    }
+
+    public static boolean isValid(int[][] grid, Coordinate base, Direction offset) {
+        return isValid(grid, base.x + offset.x, base.y + offset.y);
     }
 
     public static boolean isValid(int[][] grid, Coordinate coord) {
@@ -227,6 +236,10 @@ public class GridHelper {
         return isValid(x, y, grid[0].length, grid.length);
     }
 
+    public static boolean isValid(long[][] grid, Coordinate base, Direction offset) {
+        return isValid(grid, base.x + offset.x, base.y + offset.y);
+    }
+
     public static boolean isValid(long[][] grid, Coordinate coord) {
         return isValid(grid, coord.x, coord.y);
     }
@@ -235,12 +248,20 @@ public class GridHelper {
         return isValid(x, y, grid[0].length, grid.length);
     }
 
+    public static boolean isValid(boolean[][] grid, Coordinate base, Direction offset) {
+        return isValid(grid, base.x + offset.x, base.y + offset.y);
+    }
+
     public static boolean isValid(boolean[][] grid, Coordinate coord) {
         return isValid(grid, coord.x, coord.y);
     }
 
     public static boolean isValid(boolean[][] grid, int x, int y) {
         return isValid(x, y, grid[0].length, grid.length);
+    }
+
+    public static boolean isValid(char[][] grid, Coordinate base, Direction offset) {
+        return isValid(grid, base.x + offset.x, base.y + offset.y);
     }
 
     public static boolean isValid(char[][] grid, Coordinate coord) {
