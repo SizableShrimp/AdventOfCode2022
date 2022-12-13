@@ -40,8 +40,8 @@ dependencies {
     utilAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     utilImplementation 'one.util:streamex:0.8.1'
     utilImplementation 'com.google.guava:guava:31.1-jre'
+    utilImplementation 'com.google.code.gson:gson:2.10'
     utilImplementation 'it.unimi.dsi:fastutil:8.5.9'
-    // implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 
     testImplementation 'org.openjdk.jmh:jmh-core:1.35'
     testAnnotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
