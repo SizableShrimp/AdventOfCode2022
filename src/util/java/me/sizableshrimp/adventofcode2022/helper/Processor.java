@@ -126,22 +126,44 @@ public class Processor {
     }
 
     /**
-     * Creates a list of subgroups based on the original collection using the given size per subgroup.
+     * Creates a list of windows based on the original collection using the given size per window.
+     * The windows cannot overlap.
      *
      * @param collection the base collection
      * @param windowSize how large to make each subgroup
-     * @param allowTrailing whether any trailing elements which do not match the subgroup size should be added to the list
-     * @return a list of subgroups
-     * @param <T> the type of the collection
+     * @param allowTrailing whether any trailing elements which do not match the window size should be added to the list
+     * @return a list of windows
      */
-    public static <T> List<List<T>> createSubGroups(Collection<T> collection, int windowSize, boolean allowTrailing) {
-        List<List<T>> windows = new ArrayList<>(collection.size() / windowSize);
+    public static <T> List<List<T>> windowed(Collection<T> collection, int windowSize, boolean allowTrailing) {
+        return windowed(collection, windowSize, 0, allowTrailing);
+    }
+
+    /**
+     * Creates a list of windows based on the original collection using the given size per window.
+     * The windows cannot overlap.
+     *
+     * @param collection the base collection
+     * @param windowSize how large to make each subgroup
+     * @param skipSize how many elements to skip between each window
+     * @param allowTrailing whether any trailing elements which do not match the window size should be added to the list
+     * @param <T> the type of the collection
+     * @return a list of windows
+     */
+    public static <T> List<List<T>> windowed(Collection<T> collection, int windowSize, int skipSize, boolean allowTrailing) {
+        List<List<T>> windows = new ArrayList<>();
         List<T> currList = null;
+        int skippingCount = 0;
 
         for (T t : collection) {
+            if (skippingCount > 0) {
+                skippingCount--;
+                continue;
+            }
+
             if (currList != null && currList.size() == windowSize) {
                 windows.add(currList);
                 currList = new ArrayList<>();
+                skippingCount = skipSize;
             } else if (currList == null) {
                 currList = new ArrayList<>();
             }

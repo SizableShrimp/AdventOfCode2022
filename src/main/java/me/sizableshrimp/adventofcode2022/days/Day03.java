@@ -58,7 +58,7 @@ public class Day03 extends SeparatedDay {
     protected Object part2() {
         int sum = 0;
 
-        for (List<String> window : Processor.createSubGroups(this.lines, 3, false)) {
+        for (List<String> window : Processor.windowed(this.lines, 3, false)) {
             CharOpenHashSet charSet = new CharOpenHashSet(window.get(0).toCharArray());
             charSet.retainAll(new CharOpenHashSet(window.get(1).toCharArray()));
             charSet.retainAll(new CharOpenHashSet(window.get(2).toCharArray()));
