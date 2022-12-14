@@ -41,7 +41,7 @@ class Day13 : SeparatedDay() {
     }
 
     override fun part2(): Int {
-        // A full sort for part 2 is not necessarily.
+        // A full sort for part 2 is not necessary.
         // You can just go through each packet once to see if it is before either divider packet.
         var firstKey = 1 // Index shifted by +1
         var secondKey = 2 // Includes first divider packet and +1 index shift

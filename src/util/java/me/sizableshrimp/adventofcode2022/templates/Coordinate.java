@@ -184,6 +184,34 @@ public class Coordinate {
         return resolve(direction.x * count, direction.y * count);
     }
 
+    /**
+     * Returns a coordinate of the form (x, y + 1)
+     */
+    public Coordinate down() {
+        return resolve(Direction.SOUTH);
+    }
+
+    /**
+     * Returns a coordinate of the form (x, y - 1)
+     */
+    public Coordinate up() {
+        return resolve(Direction.NORTH);
+    }
+
+    /**
+     * Returns a coordinate of the form (x - 1, y)
+     */
+    public Coordinate left() {
+        return resolve(Direction.WEST);
+    }
+
+    /**
+     * Returns a coordinate of the form (x + 1, y)
+     */
+    public Coordinate right() {
+        return resolve(Direction.EAST);
+    }
+
     @Override
     public String toString() {
         return String.format("(%d,%d)", x, y);
