@@ -39,7 +39,6 @@ import it.unimi.dsi.fastutil.ints.IntList
 import it.unimi.dsi.fastutil.longs.LongArrayList
 import it.unimi.dsi.fastutil.longs.LongCollection
 import it.unimi.dsi.fastutil.longs.LongList
-import java.lang.IllegalArgumentException
 
 fun <T> Iterable<T>.splitOn(splitter: (T) -> Boolean): List<List<T>> {
     val result = ArrayList<List<T>>()
@@ -247,3 +246,19 @@ fun DoubleCollection.min(): Double {
 
     return min
 }
+
+fun Array<IntArray>.deepCopy() = Array(this.size) { this[it].copyOf() }
+
+fun Array<LongArray>.deepCopy() = Array(this.size) { this[it].copyOf() }
+
+fun Array<CharArray>.deepCopy() = Array(this.size) { this[it].copyOf() }
+
+fun Array<ByteArray>.deepCopy() = Array(this.size) { this[it].copyOf() }
+
+fun Array<DoubleArray>.deepCopy() = Array(this.size) { this[it].copyOf() }
+
+fun Array<FloatArray>.deepCopy() = Array(this.size) { this[it].copyOf() }
+
+fun Array<BooleanArray>.deepCopy() = Array(this.size) { this[it].copyOf() }
+
+inline fun <reified T> Array<Array<T>>.deepCopy() = Array(this.size) { this[it].copyOf() }

@@ -294,7 +294,7 @@ public class GridHelper {
     /**
      * Copy {@code base} into {@code copy}.
      */
-    public static <T> T[][] copy(T[][] base, T[][] copy) {
+    public static <T> T[][] deepCopy(T[][] base, T[][] copy) {
         for (int i = 0; i < base.length; i++) {
             T[] ts = base[i];
             copy[i] = Arrays.copyOf(ts, ts.length);
@@ -303,7 +303,7 @@ public class GridHelper {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T[][] copy(T[][] original) {
+    public static <T> T[][] deepCopy(T[][] original) {
         T[][] copy = (T[][]) Array.newInstance(original.getClass().getComponentType(), original.length);
         for (int i = 0; i < original.length; i++) {
             T[] ts = original[i];
@@ -321,7 +321,7 @@ public class GridHelper {
         return copy;
     }
 
-    public static int[][] copy(int[][] original) {
+    public static int[][] deepCopy(int[][] original) {
         int[][] copy = new int[original.length][];
         for (int i = 0; i < original.length; i++) {
             int[] row = original[i];
@@ -330,7 +330,7 @@ public class GridHelper {
         return copy;
     }
 
-    public static long[][] copy(long[][] original) {
+    public static long[][] deepCopy(long[][] original) {
         long[][] copy = new long[original.length][];
         for (int i = 0; i < original.length; i++) {
             long[] row = original[i];
@@ -339,7 +339,7 @@ public class GridHelper {
         return copy;
     }
 
-    public static boolean[][] copy(boolean[][] original) {
+    public static boolean[][] deepCopy(boolean[][] original) {
         boolean[][] copy = new boolean[original.length][];
         for (int i = 0; i < original.length; i++) {
             boolean[] row = original[i];
@@ -348,7 +348,7 @@ public class GridHelper {
         return copy;
     }
 
-    public static char[][] copy(char[][] original) {
+    public static char[][] deepCopy(char[][] original) {
         char[][] copy = new char[original.length][];
         for (int i = 0; i < original.length; i++) {
             char[] row = original[i];

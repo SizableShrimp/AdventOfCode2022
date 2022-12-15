@@ -49,9 +49,9 @@ public class Coordinate {
      * @return A new {@link Coordinate} object.
      */
     public static Coordinate parse(String coord) {
-        String[] arr = coord.split(",");
-        int x = Integer.parseInt(arr[0]);
-        int y = Integer.parseInt(arr[1]);
+        int commaIdx = coord.indexOf(',');
+        int x = Integer.parseInt(coord.substring(0, commaIdx));
+        int y = Integer.parseInt(coord.substring(commaIdx + 1));
         return new Coordinate(x, y);
     }
 

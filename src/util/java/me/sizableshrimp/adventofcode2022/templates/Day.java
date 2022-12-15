@@ -119,6 +119,14 @@ public abstract class Day {
         parse();
     }
 
+    /**
+     * This should only be using for benchmarking purposes. Other uses are not supported.
+     */
+    @VisibleForTesting
+    public final void evaluateTesting() {
+        evaluate();
+    }
+
     public record Result(Object part1, Object part2) {
         public static Result of(Object part1, Object part2) {
             return new Result(part1, part2);

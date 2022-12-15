@@ -48,13 +48,13 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 3, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 public class Today {
     @Benchmark
-    public void parseAndEvaluateToday(DayState state) {
-        state.instance.parseAndEvaluate();
+    public void parseToday(DayState state) {
+        state.instance.parseTesting();
     }
 
     @Benchmark
-    public void parseToday(DayState state) {
-        state.instance.parseTesting();
+    public void evaluateToday(DayState state) {
+        state.instance.evaluateTesting();
     }
 
     @State(Scope.Thread)
@@ -64,6 +64,7 @@ public class Today {
         @Setup(Level.Trial)
         public void setup() throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
             instance = Main.getCurrentDayConstructor().newInstance();
+            instance.parseTesting();
         }
 
         @TearDown(Level.Trial)
