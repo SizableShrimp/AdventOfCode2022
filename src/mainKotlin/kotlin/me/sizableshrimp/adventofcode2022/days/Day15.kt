@@ -23,6 +23,7 @@
 
 package me.sizableshrimp.adventofcode2022.days
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet
 import me.sizableshrimp.adventofcode2022.templates.Coordinate
 import me.sizableshrimp.adventofcode2022.templates.SeparatedDay
 import kotlin.math.abs
@@ -57,15 +58,32 @@ class Day15 : SeparatedDay() {
         var x = 0
         var y = 0
         val maxXY = 4000000
+        val recalculateRows = IntOpenHashSet()
+        recalculateRows.add(0)
+
+        for ((pos, _, beaconDist) in this.sensors) {
+            // We recalculate the sensors visible to a y-row whenever a sensor becomes in or out of range
+            recalculateRows.add(pos.y - beaconDist)
+            recalculateRows.add(pos.y + beaconDist)
+        }
+
+        val possibleSensors = ArrayList<Sensor>()
 
         while (true) {
+            if (recalculateRows.contains(y)) {
+                possibleSensors.clear()
+                for (sensor in this.sensors) {
+                    val yDist = abs(sensor.pos.y - y)
+                    if (yDist <= sensor.beaconDist) possibleSensors.add(sensor)
+                }
+            }
+
             var found = true
 
-            for ((pos, _, maxDist) in this.sensors) {
-                val yDist = abs(pos.y - y)
-                if (yDist > maxDist) continue // We are already outside the range of the sensor, so it can't help us
-
+            for ((pos, _, maxDist) in possibleSensors) {
+                val yDist = abs(pos.y - y) // We guarantee that yDist is always lower than or equal to maxDist here
                 val xDist = abs(pos.x - x)
+
                 if (yDist + xDist <= maxDist) {
                     x = pos.x + maxDist - yDist + 1
                     if (x > maxXY) {
@@ -75,12 +93,11 @@ class Day15 : SeparatedDay() {
                 }
             }
 
-            if (found) break
+            if (found) return x * maxXY.toLong() + y
+
             x = 0
             y++
         }
-
-        return x * maxXY.toLong() + y
     }
 
     override fun parse() {

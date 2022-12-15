@@ -23,6 +23,8 @@
 
 package me.sizableshrimp.adventofcode2022.days;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import me.sizableshrimp.adventofcode2022.templates.Coordinate;
 import me.sizableshrimp.adventofcode2022.templates.SeparatedDay;
 
@@ -69,16 +71,37 @@ public class Day15 extends SeparatedDay {
         int x = 0;
         int y = 0;
         int maxXY = 4_000_000;
+        IntSet recalculateRows = new IntOpenHashSet();
+        recalculateRows.add(0);
+
+        for (Sensor sensor : this.sensors) {
+            // We recalculate the sensors visible to a y-row whenever a sensor becomes in or out of range
+            recalculateRows.add(sensor.pos.y - sensor.beaconDist);
+            recalculateRows.add(sensor.pos.y + sensor.beaconDist);
+        }
+
+        List<Sensor> possibleSensors = new ArrayList<>();
+        int sensorsSize = 0;
 
         while (true) {
-            boolean found = true;
-            for (Sensor sensor : this.sensors) {
-                int yDist = Math.abs(sensor.pos.y - y);
-                int maxDist = sensor.beaconDist;
-                if (yDist > maxDist)
-                    continue; // We are already outside the range of the sensor, so it can't help us
+            if (recalculateRows.contains(y)) {
+                possibleSensors.clear();
+                for (Sensor sensor : this.sensors) {
+                    int yDist = Math.abs(sensor.pos.y - y);
+                    if (yDist <= sensor.beaconDist)
+                        possibleSensors.add(sensor);
+                }
+                sensorsSize = possibleSensors.size();
+            }
 
+            boolean found = true;
+
+            for (int i = 0; i < sensorsSize; i++) {
+                Sensor sensor = possibleSensors.get(i);
+                int yDist = Math.abs(sensor.pos.y - y); // We guarantee that yDist is always lower than or equal to maxDist here
+                int maxDist = sensor.beaconDist;
                 int xDist = Math.abs(sensor.pos.x - x);
+
                 if (yDist + xDist <= maxDist) {
                     x = sensor.pos.x + maxDist - yDist + 1;
                     if (x > maxXY) {
@@ -89,13 +112,11 @@ public class Day15 extends SeparatedDay {
             }
 
             if (found)
-                break;
+                return x * (long) maxXY + y;
 
             x = 0;
             y++;
         }
-
-        return x * (long) maxXY + y;
     }
 
     @Override
