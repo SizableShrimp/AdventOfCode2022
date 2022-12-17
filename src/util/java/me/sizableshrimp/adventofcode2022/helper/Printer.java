@@ -37,9 +37,15 @@ public class Printer {
     }
 
     public static String toString(Collection<Coordinate> coords, Coordinate2StringFunction function) {
+        int minX = Integer.MAX_VALUE;
+        int minY = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE;
         int maxY = Integer.MIN_VALUE;
         for (Coordinate coord : coords) {
+            if (coord.x < minX)
+                minX = coord.x;
+            if (coord.y < minY)
+                minY = coord.y;
             if (coord.x > maxX)
                 maxX = coord.x;
             if (coord.y > maxY)
@@ -48,8 +54,8 @@ public class Printer {
 
         StringBuilder builder = new StringBuilder();
 
-        for (int y = 0; y <= maxY; y++) {
-            for (int x = 0; x <= maxX; x++) {
+        for (int y = minY; y <= maxY; y++) {
+            for (int x = minX; x <= maxX; x++) {
                 Coordinate coord = Coordinate.of(x, y);
                 builder.append(function.apply(coords.contains(coord), coord));
             }
