@@ -27,4 +27,20 @@ public class StringUtil {
     public static String reverse(String s) {
         return new StringBuilder(s).reverse().toString();
     }
+
+    /**
+     * Splits the given string into groups with the given length.
+     * If there are extra characters at the end that do not fit into a group, they will be ignored.
+     */
+    public static String[] splitGroups(String s, int groupLength) {
+        int groups = s.length() / groupLength;
+        String[] split = new String[groups];
+
+        for (int i = 0; i < groups; i++) {
+            int startIdx = i * groupLength;
+            split[i] = s.substring(startIdx, startIdx + groupLength);
+        }
+
+        return split;
+    }
 }

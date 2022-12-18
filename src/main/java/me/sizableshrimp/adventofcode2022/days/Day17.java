@@ -25,8 +25,8 @@ package me.sizableshrimp.adventofcode2022.days;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2LongMap;
+import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import me.sizableshrimp.adventofcode2022.templates.Coordinate;
@@ -40,26 +40,27 @@ import java.util.Set;
 
 // https://adventofcode.com/2022/day/17 - Pyroclastic Flow
 public class Day17 extends Day {
-    private static final List<RockFormation> ROCK_FORMATIONS = List.of(
+    private static final List<Set<Coordinate>> ROCK_FORMATIONS = List.of(
             // ####
-            new RockFormation(0, Set.of(Coordinate.of(0, 0), Coordinate.of(1, 0), Coordinate.of(2, 0), Coordinate.of(3, 0))),
+            Set.of(Coordinate.of(0, 0), Coordinate.of(1, 0), Coordinate.of(2, 0), Coordinate.of(3, 0)),
             // .#.
             // ###
             // .#.
-            new RockFormation(2, Set.of(Coordinate.of(1, 0), Coordinate.of(0, 1), Coordinate.of(1, 1), Coordinate.of(2, 1), Coordinate.of(1, 2))),
+            Set.of(Coordinate.of(1, 2), Coordinate.of(0, 1), Coordinate.of(1, 1), Coordinate.of(2, 1), Coordinate.of(1, 0)),
             // ..#
             // ..#
             // ###
-            new RockFormation(2, Set.of(Coordinate.of(2, 0), Coordinate.of(2, 1), Coordinate.of(0, 2), Coordinate.of(1, 2), Coordinate.of(2, 2))),
+            Set.of(Coordinate.of(2, 2), Coordinate.of(2, 1), Coordinate.of(0, 0), Coordinate.of(1, 0), Coordinate.of(2, 0)),
             // #
             // #
             // #
             // #
-            new RockFormation(3, Set.of(Coordinate.of(0, 0), Coordinate.of(0, 1), Coordinate.of(0, 2), Coordinate.of(0, 3))),
+            Set.of(Coordinate.of(0, 3), Coordinate.of(0, 2), Coordinate.of(0, 1), Coordinate.of(0, 0)),
             // ##
             // ##
-            new RockFormation(1, Set.of(Coordinate.of(0, 0), Coordinate.of(1, 0), Coordinate.of(0, 1), Coordinate.of(1, 1)))
+            Set.of(Coordinate.of(0, 1), Coordinate.of(1, 1), Coordinate.of(0, 0), Coordinate.of(1, 0))
     );
+    private static final IntList ROCK_HEIGHTS = IntList.of(1, 3, 3, 4, 2);
     private List<Direction> jets;
 
     public static void main(String[] args) {
@@ -68,53 +69,59 @@ public class Day17 extends Day {
 
     @Override
     protected Result evaluate() {
-        Set<Coordinate> rockCoords = new HashSet<>();
-        Int2ObjectMap<Set<Coordinate>> cycles = new Int2ObjectOpenHashMap<>();
+        List<boolean[]> grid = new ArrayList<>();
+        Int2LongMap cycles = new Int2LongOpenHashMap();
         Int2IntMap highestYs = new Int2IntOpenHashMap();
         Int2IntMap oldRoundCount = new Int2IntOpenHashMap();
         IntList oldHeights = new IntArrayList();
         int highestY = 0;
         int rockIdx = 0;
+        int rocksSize = ROCK_FORMATIONS.size();
         int jetIdx = 0;
+        int jetsSize = this.jets.size();
         int part1;
         long part2;
+        int cycleStreak = 0;
+        long cycle = 0;
 
         for (int round = 1; ; round++) {
-            RockFormation rockFormation = ROCK_FORMATIONS.get(rockIdx);
-            Set<Coordinate> coords = new HashSet<>();
-            for (Coordinate coord : rockFormation.shape) {
-                coords.add(Coordinate.of(coord.x + 2, rockFormation.bottomEdge - coord.y + highestY + 4));
+            Set<Coordinate> rockCoords = new HashSet<>();
+            for (Coordinate coord : ROCK_FORMATIONS.get(rockIdx)) {
+                Coordinate rockCoord = coord.resolve(2, highestY + 4);
+                rockCoords.add(rockCoord);
+
+                while (rockCoord.y > grid.size()) {
+                    grid.add(new boolean[7]);
+                }
             }
             int key = jetIdx << 3 | rockIdx;
-            Set<Coordinate> cycle = new HashSet<>();
-            for (Coordinate coord : rockCoords) {
-                if (coord.y > highestY - 40)
-                    cycle.add(coord.resolve(0, -highestY + 40));
-            }
-            Set<Coordinate> oldCycle = cycles.get(key);
-            if (oldCycle != null && oldCycle.equals(cycle)) {
-                int roundsLoop = round - oldRoundCount.get(key);
-                long toRun = 1_000_000_000_000L - round;
-                int yDiff = highestY - highestYs.get(key);
-                part1 = yDiff * ((2022 - round) / roundsLoop) + oldHeights.getInt(oldRoundCount.get(key) + ((2022 - round) % roundsLoop) - 1) + yDiff;
-                part2 = yDiff * (toRun / roundsLoop) + oldHeights.getInt(oldRoundCount.get(key) + (int) (toRun % roundsLoop) - 1) + yDiff;
-                cycles.clear();
-                highestYs.clear();
-                oldRoundCount.clear();
-                break;
-            } else if (oldCycle == null) {
+            // System.out.println(toString(highestY, rockIdx, cycle, rockCoords));
+            long oldCycle = cycles.get(key);
+            if (oldCycle != 0 && oldCycle == cycle) {
+                cycleStreak++;
+                if (cycleStreak > 10) {
+                    int roundsLoop = round - oldRoundCount.get(key);
+                    long toRun = 1_000_000_000_000L - round;
+                    int yDiff = highestY - highestYs.get(key);
+                    part1 = yDiff * ((2022 - round) / roundsLoop) + oldHeights.getInt(oldRoundCount.get(key) + ((2022 - round) % roundsLoop) - 1) + yDiff;
+                    part2 = yDiff * (toRun / roundsLoop) + oldHeights.getInt(oldRoundCount.get(key) + (int) (toRun % roundsLoop) - 1) + yDiff;
+                    break;
+                }
+            } else if (oldCycle != 0) {
+                cycleStreak = 0;
+            } else {
                 cycles.put(key, cycle);
                 highestYs.put(key, highestY);
                 oldRoundCount.put(key, round);
             }
             boolean jetPushing = true;
             while (true) {
-                Set<Coordinate> newCoords = new HashSet<>(coords.size());
+                Set<Coordinate> newCoords = new HashSet<>(rockCoords.size());
                 Direction moveDir = jetPushing ? this.jets.get(jetIdx) : Direction.NORTH;
                 boolean failMove = false;
-                for (Coordinate coord : coords) {
-                    Coordinate resolved = coord.resolve(moveDir);
-                    if (resolved.x < 0 || resolved.x > 6 || resolved.y <= 0 || rockCoords.contains(resolved)) {
+                for (Coordinate rockCoord : rockCoords) {
+                    Coordinate resolved = rockCoord.resolve(moveDir);
+                    if (resolved.x < 0 || resolved.x > 6 || resolved.y <= 0 || grid.get(resolved.y - 1)[resolved.x]) {
                         failMove = true;
                         break;
                     }
@@ -124,22 +131,36 @@ public class Day17 extends Day {
                     break;
 
                 if (!failMove)
-                    coords = newCoords;
+                    rockCoords = newCoords;
                 if (jetPushing) {
                     jetIdx++;
-                    if (jetIdx == this.jets.size())
+                    if (jetIdx == jetsSize)
                         jetIdx = 0;
                 }
                 jetPushing = !jetPushing;
             }
-            for (Coordinate coord : coords) {
-                if (coord.y > highestY)
-                    highestY = coord.y;
+            int oldHighestY = highestY;
+            for (Coordinate rockCoord : rockCoords) {
+                if (rockCoord.y > highestY)
+                    highestY = rockCoord.y;
+            }
+            if (highestY > 9 && highestY != oldHighestY) {
+                int yChange = highestY - Math.max(9, oldHighestY);
+                cycle >>= yChange * 7; // Delete however many rows got pushed out by new max Y
+            }
+            for (Coordinate rockCoord : rockCoords) {
+                // 9 rows is the max we can pack into a long (9x7 = 63)
+                // Highest Y includes a row, so we need >= highestY - 8 to get 9
+                int min = Math.max(1, highestY - 8);
+                if (rockCoord.y >= min) {
+                    cycle |= 1L << ((rockCoord.y - min) * 7 + rockCoord.x);
+                }
+
+                grid.get(rockCoord.y - 1)[rockCoord.x] = true;
             }
             oldHeights.add(highestY);
-            rockCoords.addAll(coords);
             rockIdx++;
-            if (rockIdx == ROCK_FORMATIONS.size())
+            if (rockIdx == rocksSize)
                 rockIdx = 0;
         }
 
@@ -156,5 +177,27 @@ public class Day17 extends Day {
         }
     }
 
-    private record RockFormation(int bottomEdge, Set<Coordinate> shape) {}
+    private static String toString(int highestY, int rockIdx, long cycle, Set<Coordinate> rockCoords) {
+        StringBuilder result = new StringBuilder();
+        int height = Math.min(9, highestY) + 3 + ROCK_HEIGHTS.getInt(rockIdx);
+        int yOffset = Math.max(1, highestY - 8);
+
+        for (int y = height - 1; y >= 0; y--) {
+            result.append('|');
+            for (int x = 0; x < 7; x++) {
+                boolean filled = y <= 8 && ((cycle >> (y * 7 + x)) & 1) == 1;
+                if (filled) {
+                    result.append('#');
+                } else if (rockCoords.contains(Coordinate.of(x, y + yOffset))) {
+                    result.append('@');
+                } else {
+                    result.append('.');
+                }
+            }
+            result.append("|\n");
+        }
+        result.append(highestY <= 9 ? "+-------+\n" : "   ...\n");
+
+        return result.toString();
+    }
 }

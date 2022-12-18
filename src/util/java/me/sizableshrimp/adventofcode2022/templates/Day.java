@@ -53,7 +53,7 @@ public abstract class Day {
     /**
      * @return the raw file input, denoting lines by <b>Unix-style endings</b> or <code>\n</code>
      */
-    protected String getRawInput() {
+    protected final String getRawInput() {
         return String.join("\n", this.lines);
     }
 
