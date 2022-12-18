@@ -42,15 +42,20 @@ public class ZCoordinate {
      * @return A new {@link ZCoordinate} object.
      */
     public static ZCoordinate parse(String coord) {
-        String[] arr = coord.split(",");
-        int x = Integer.parseInt(arr[0]);
-        int y = Integer.parseInt(arr[1]);
-        int z = Integer.parseInt(arr[2]);
+        int commaIdx = coord.indexOf(',');
+        int x = Integer.parseInt(coord.substring(0, commaIdx));
+        int commaIdx2 = coord.indexOf(',', commaIdx + 1);
+        int y = Integer.parseInt(coord.substring(commaIdx + 1, commaIdx2));
+        int z = Integer.parseInt(coord.substring(commaIdx2 + 1));
         return new ZCoordinate(x, y, z);
     }
 
     public ZCoordinate resolve(ZCoordinate other) {
         return resolve(other.x, other.y, other.z);
+    }
+
+    public ZCoordinate resolve(ZDirection direction) {
+        return resolve(direction.x, direction.y, direction.z);
     }
 
     /**
