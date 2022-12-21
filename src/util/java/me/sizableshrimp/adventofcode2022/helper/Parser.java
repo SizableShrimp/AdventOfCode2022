@@ -23,6 +23,8 @@
 
 package me.sizableshrimp.adventofcode2022.helper;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import me.sizableshrimp.adventofcode2022.templates.Coordinate;
 import me.sizableshrimp.adventofcode2022.templates.EnumState;
 
@@ -134,5 +136,15 @@ public class Parser {
                 return t;
         }
         throw new IllegalArgumentException();
+    }
+
+    public static <T extends Enum<T> & EnumState<T>> Char2ObjectMap<T> getEnumCharMap(T[] enumConstants) {
+        Char2ObjectOpenHashMap<T> map = new Char2ObjectOpenHashMap<>();
+
+        for (T t : enumConstants) {
+            map.put(t.getMappedChar(), t);
+        }
+
+        return map;
     }
 }
