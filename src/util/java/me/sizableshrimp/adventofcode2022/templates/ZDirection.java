@@ -53,4 +53,24 @@ public enum ZDirection {
     public ZCoordinate asCoords() {
         return ZCoordinate.of(this.x, this.y, this.z);
     }
+
+    public static ZDirection fromDirection(Direction direction) {
+        return switch (direction) {
+            case NORTH -> NORTH;
+            case EAST -> EAST;
+            case SOUTH -> SOUTH;
+            case WEST -> WEST;
+            default -> throw new IllegalArgumentException("Invalid direction: " + direction);
+        };
+    }
+
+    public Direction toDirection() {
+        return switch (this) {
+            case NORTH -> Direction.NORTH;
+            case EAST -> Direction.EAST;
+            case SOUTH -> Direction.SOUTH;
+            case WEST -> Direction.WEST;
+            default -> throw new IllegalArgumentException("Invalid z direction: " + this);
+        };
+    }
 }

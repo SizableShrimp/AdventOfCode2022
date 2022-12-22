@@ -74,6 +74,26 @@ public class GridHelper {
         return convert(grid, lines, c -> Parser.parseEnumState(enumConstants, c));
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T extends Enum<T> & EnumState<T>> T[][] convertVariableLength(GridFactory<T[][]> generator, List<String> lines, T defaultState) {
+        int maxLength = 0;
+        for (String line : lines) {
+            int length = line.length();
+            if (length > maxLength)
+                maxLength = length;
+        }
+
+        int rows = lines.size();
+        T[][] grid = generator.create(rows, maxLength);
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < maxLength; x++) {
+                grid[y][x] = defaultState;
+            }
+        }
+        T[] enumConstants = ((Class<T>) grid.getClass().getComponentType().getComponentType()).getEnumConstants();
+        return convert(grid, lines, c -> Parser.parseEnumState(enumConstants, c));
+    }
+
     public static <T> T[][] reflectY(GridFactory<T[][]> generator, T[][] grid) {
         int yLength = grid.length;
         int xLength = grid[0].length;

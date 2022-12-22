@@ -24,6 +24,7 @@
 package me.sizableshrimp.adventofcode2022.templates;
 
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,10 +35,10 @@ import java.util.Map;
  */
 @AllArgsConstructor
 public enum Direction {
-    NORTH(0, 0, -1), NORTHEAST(45, 1, -1),
-    EAST(90, 1, 0), SOUTHEAST(135, 1, 1),
-    SOUTH(180, 0, 1), SOUTHWEST(225, -1, 1),
-    WEST(270, -1, 0), NORTHWEST(315, -1, -1);
+    NORTH(0, 0, -1, Axis.Y), NORTHEAST(45, 1, -1, null),
+    EAST(90, 1, 0, Axis.X), SOUTHEAST(135, 1, 1, null),
+    SOUTH(180, 0, 1, Axis.Y), SOUTHWEST(225, -1, 1, null),
+    WEST(270, -1, 0, Axis.X), NORTHWEST(315, -1, -1, null);
 
     private static final Map<Integer, Direction> degreesMap = new HashMap<>();
     private static final Direction[] CARDINAL = {NORTH, EAST, SOUTH, WEST};
@@ -53,6 +54,8 @@ public enum Direction {
     public final int degrees;
     public final int x;
     public final int y;
+    @Nullable
+    public final Axis axis;
 
     public static Map<Character, Direction> getCardinalDirections(char up, char right, char down, char left) {
         return Map.of(up, NORTH, right, EAST, down, SOUTH, left, WEST);
@@ -140,5 +143,9 @@ public enum Direction {
 
     public Coordinate asCoords() {
         return Coordinate.of(this.x, this.y);
+    }
+
+    public enum Axis {
+        X, Y
     }
 }
