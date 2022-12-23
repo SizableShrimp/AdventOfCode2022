@@ -23,6 +23,7 @@
 
 package me.sizableshrimp.adventofcode2022.helper;
 
+import it.unimi.dsi.fastutil.chars.Char2BooleanFunction;
 import it.unimi.dsi.fastutil.chars.Char2CharFunction;
 import it.unimi.dsi.fastutil.chars.Char2IntFunction;
 import it.unimi.dsi.fastutil.chars.Char2LongFunction;
@@ -35,7 +36,9 @@ import me.sizableshrimp.adventofcode2022.templates.EnumState;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GridHelper {
     /**
@@ -54,6 +57,20 @@ public class GridHelper {
     public static <T> T[][] convert(T[][] grid, List<String> lines, Char2ObjectFunction<T> func) {
         convert(lines, (y, x, c) -> grid[y][x] = func.get(c));
         return grid;
+    }
+
+    public static Set<Coordinate> convertToSet(List<String> lines, Char2BooleanFunction func) {
+        Set<Coordinate> coords = new HashSet<>();
+
+        for (int y = 0; y < lines.size(); y++) {
+            String line = lines.get(y);
+            for (int x = 0; x < line.length(); x++) {
+                if (func.get(line.charAt(x)))
+                    coords.add(Coordinate.of(x, y));
+            }
+        }
+
+        return coords;
     }
 
     private static void convert(List<String> lines, GridConsumer consumer) {
