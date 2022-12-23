@@ -23,7 +23,6 @@
 
 package me.sizableshrimp.adventofcode2022.days;
 
-import it.unimi.dsi.fastutil.Pair;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.sizableshrimp.adventofcode2022.helper.GridHelper;
@@ -92,13 +91,20 @@ public class Day22 extends SeparatedDay {
                     continue;
                 }
 
-                Pair<Coordinate, Direction> pair = getWrappedCoord(coord, dir, part2);
-                tempCoord = pair.left();
+                CubeMapping cubeMapping = null;
+                if (part2) {
+                    Region oldRegion = getRegion(coord, dir);
+                    cubeMapping = CUBE_REGION_MAP.get(oldRegion);
+                    tempCoord = this.getCubeWrappedCoord(coord, cubeMapping);
+                } else {
+                    tempCoord = this.getWrappedCoord(coord, dir);
+                }
                 if (this.grid[tempCoord.y][tempCoord.x] == State.WALL)
                     break;
 
                 coord = tempCoord;
-                dir = pair.right();
+                if (cubeMapping != null)
+                    dir = cubeMapping.region.dir;
             }
         }
 
@@ -112,11 +118,8 @@ public class Day22 extends SeparatedDay {
         return 1000 * (coord.y + 1) + 4 * (coord.x + 1) + facing;
     }
 
-    private Pair<Coordinate, Direction> getWrappedCoord(Coordinate originalPos, Direction dir, boolean part2) {
-        if (part2)
-            return getCubeWrappedCoord(originalPos, dir);
-
-        Coordinate newCoord = switch (dir) {
+    private Coordinate getWrappedCoord(Coordinate originalPos, Direction dir) {
+        return switch (dir) {
             case NORTH -> {
                 int x = originalPos.x;
                 for (int y = this.grid.length - 1; y >= 0; y--) {
@@ -163,20 +166,17 @@ public class Day22 extends SeparatedDay {
             }
             default -> throw new IllegalStateException("Unexpected value: " + dir);
         };
-        return Pair.of(newCoord, dir);
     }
 
     private Region getRegion(Coordinate coord, Direction dir) {
         return new Region(coord.x / this.regionSize, coord.y / this.regionSize, dir);
     }
 
-    private Pair<Coordinate, Direction> getCubeWrappedCoord(Coordinate originalPos, Direction dir) {
-        Region oldRegion = getRegion(originalPos, dir);
-        CubeMapping cubeMapping = CUBE_REGION_MAP.get(oldRegion);
+    private Coordinate getCubeWrappedCoord(Coordinate originalPos, CubeMapping cubeMapping) {
         int relativeX = originalPos.x % this.regionSize;
         int relativeY = originalPos.y % this.regionSize;
 
-        return Pair.of(mapCoord(cubeMapping, relativeX, relativeY), cubeMapping.region.dir);
+        return mapCoord(cubeMapping, relativeX, relativeY);
     }
 
     private Coordinate mapCoord(CubeMapping cubeMapping, int oldRelativeX, int oldRelativeY) {

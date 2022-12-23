@@ -146,6 +146,10 @@ public enum Direction {
     }
 
     public enum Axis {
-        X, Y
+        X, Y;
+
+        public Axis opposite() {
+            return this == X ? Y : X;
+        }
     }
 }

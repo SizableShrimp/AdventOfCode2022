@@ -212,6 +212,10 @@ public class Coordinate {
         return resolve(Direction.EAST);
     }
 
+    public int getAxis(Direction.Axis axis) {
+        return axis == Direction.Axis.X ? this.x : this.y;
+    }
+
     @Override
     public String toString() {
         return String.format("(%d,%d)", x, y);
