@@ -23,19 +23,14 @@
 
 package me.sizableshrimp.adventofcode2022.days;
 
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
 import me.sizableshrimp.adventofcode2022.helper.GridHelper;
 import me.sizableshrimp.adventofcode2022.helper.MathUtil;
 import me.sizableshrimp.adventofcode2022.templates.Coordinate;
 import me.sizableshrimp.adventofcode2022.templates.Day;
 import me.sizableshrimp.adventofcode2022.templates.Direction;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.HashSet;
+import java.util.Set;
 
 // https://adventofcode.com/2022/day/24 - Blizzard Basin
 public class Day24 extends Day {
@@ -80,66 +75,34 @@ public class Day24 extends Day {
         return fullBlizzards;
     }
 
-    private int getMinSteps(int startingSteps, Coordinate start, Coordinate goal) {
-        Queue<Node> queue = new PriorityQueue<>(Comparator.comparingInt(n -> n.steps + n.coord.distance(goal)));
-        Map<Coordinate, IntSet> steps = new HashMap<>();
-        queue.add(new Node(start, startingSteps));
+    private int getMinSteps(int steps, Coordinate start, Coordinate goal) {
+        Set<Coordinate> possible = new HashSet<>();
+        possible.add(start);
 
-        while (!queue.isEmpty()) {
-            Node node = queue.remove();
-            int newSteps = node.steps + 1;
+        while (true) {
+            steps++;
+            Set<Coordinate> next = new HashSet<>();
 
-            if (steps.containsKey(node.coord)) {
-                IntSet curSteps = steps.get(node.coord);
-                if (curSteps.contains(node.steps % this.loop))
-                    continue;
+            for (Coordinate coord : possible) {
+                for (Direction dir : Direction.cardinalDirections()) {
+                    Coordinate neighbor = coord.resolve(dir);
+                    if (tryAddCoord(steps, next, neighbor) && neighbor.equals(goal))
+                        return steps;
+                }
+                tryAddCoord(steps, next, coord);
             }
 
-            steps.computeIfAbsent(node.coord, c -> new IntOpenHashSet()).add(node.steps % this.loop);
-
-            for (Direction dir : Direction.cardinalDirections()) {
-                Coordinate neighbor = node.coord.resolve(dir);
-                if (!GridHelper.isValid(this.grid, neighbor) || this.grid[neighbor.y][neighbor.x])
-                    continue;
-
-                boolean checkBlizzard = true;
-
-                if (neighbor.equals(goal)) {
-                    return newSteps;
-                } else if (neighbor.equals(start)) {
-                    checkBlizzard = false;
-                }
-
-                if (checkBlizzard && this.hasBlizzard(neighbor, newSteps))
-                    continue;
-
-                if (steps.containsKey(neighbor)) {
-                    IntSet curSteps = steps.get(neighbor);
-                    if (curSteps.contains(newSteps % this.loop))
-                        continue;
-                }
-
-                Node newNode = new Node(neighbor, newSteps);
-                queue.add(newNode);
-            }
-
-            if (node.coord.equals(start) || node.coord.equals(goal) || !this.hasBlizzard(node.coord, newSteps)) {
-                if (steps.containsKey(node.coord)) {
-                    IntSet curSteps = steps.get(node.coord);
-                    if (curSteps.contains(newSteps % this.loop))
-                        continue;
-                }
-
-                Node newNode = new Node(node.coord, newSteps);
-                queue.add(newNode);
-            }
+            possible = next;
         }
-
-        throw new IllegalStateException();
     }
 
-    private boolean hasBlizzard(Coordinate target, int steps) {
-        return this.blizzards[steps % this.loop][target.y - 1][target.x - 1];
+    private boolean tryAddCoord(int steps, Set<Coordinate> next, Coordinate neighbor) {
+        if (GridHelper.isValid(this.grid, neighbor) && !this.grid[neighbor.y][neighbor.x] && (neighbor.y == 0 || neighbor.y == this.grid.length - 1 || !this.blizzards[steps % this.loop][neighbor.y - 1][neighbor.x - 1])) {
+            next.add(neighbor);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -170,6 +133,4 @@ public class Day24 extends Day {
         this.goal = Coordinate.of(this.grid[0].length - 2, this.grid.length - 1);
         this.blizzards = getFullBlizzards(horizModulo, vertModulo, blizzardDirs);
     }
-
-    private record Node(Coordinate coord, int steps) {}
 }
