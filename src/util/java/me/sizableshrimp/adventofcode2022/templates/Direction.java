@@ -145,6 +145,10 @@ public enum Direction {
         return Coordinate.of(this.x, this.y);
     }
 
+    public int getAxis(Axis axis) {
+        return axis == Axis.X ? this.x : this.y;
+    }
+
     public enum Axis {
         X, Y;
 

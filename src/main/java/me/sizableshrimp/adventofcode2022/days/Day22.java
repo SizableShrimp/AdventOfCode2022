@@ -26,6 +26,7 @@ package me.sizableshrimp.adventofcode2022.days;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.sizableshrimp.adventofcode2022.helper.GridHelper;
+import me.sizableshrimp.adventofcode2022.helper.MathUtil;
 import me.sizableshrimp.adventofcode2022.templates.Coordinate;
 import me.sizableshrimp.adventofcode2022.templates.Direction;
 import me.sizableshrimp.adventofcode2022.templates.EnumState;
@@ -205,7 +206,7 @@ public class Day22 extends SeparatedDay {
     @Override
     protected void parse() {
         this.grid = GridHelper.convertVariableLength((y, x) -> new State[y][x], this.lines.subList(0, this.lines.size() - 2), State.EDGE);
-        this.regionSize = gcd(this.grid.length, this.grid[0].length);
+        this.regionSize = MathUtil.gcd(this.grid.length, this.grid[0].length);
 
         for (int x = 0; x < this.grid[0].length; x++) {
             State state = this.grid[0][x];
@@ -273,16 +274,6 @@ public class Day22 extends SeparatedDay {
         putRegionPairing(1, 1, Direction.WEST, 0, 2, Direction.SOUTH, true, false);
         // Region 5
         putRegionPairing(1, 2, Direction.SOUTH, 0, 3, Direction.WEST, true, false);
-    }
-
-    private static int gcd(int a, int b) {
-        while (b != 0) {
-            int temp = b;
-            b = a % b;
-            a = temp;
-        }
-
-        return a;
     }
 
     private record Move(char dirChar, int amount) {}

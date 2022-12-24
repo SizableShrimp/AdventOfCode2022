@@ -212,6 +212,9 @@ public class Coordinate {
         return resolve(Direction.EAST);
     }
 
+    /**
+     * Returns the value on the direction axis.
+     */
     public int getAxis(Direction.Axis axis) {
         return axis == Direction.Axis.X ? this.x : this.y;
     }
