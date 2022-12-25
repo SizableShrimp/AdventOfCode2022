@@ -247,6 +247,12 @@ fun DoubleCollection.min(): Double {
     return min
 }
 
+fun IntRange.toIntList(): IntList = IntArrayList().also { for (i in this) it.add(i) }
+
+fun LongRange.toLongList(): LongList = LongArrayList().also { for (i in this) it.add(i) }
+
+fun CharRange.toCharList(): CharList = CharArrayList().also { for (i in this) it.add(i) }
+
 fun Array<IntArray>.deepCopy() = Array(this.size) { this[it].copyOf() }
 
 fun Array<LongArray>.deepCopy() = Array(this.size) { this[it].copyOf() }

@@ -24,24 +24,27 @@
 package me.sizableshrimp.adventofcode2022.templates;
 
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The 6 directions that only vary on a single axis of x, y, or z
  */
 @AllArgsConstructor
 public enum ZDirection {
-    NORTH(0, -1, 0),
-    EAST(1, 0, 0),
-    SOUTH(0, 1, 0),
-    WEST(-1, 0, 0),
-    UP(0, 0, 1),
-    DOWN(0, 0, -1);
+    NORTH(0, -1, 0, Axis.Y),
+    EAST(1, 0, 0, Axis.X),
+    SOUTH(0, 1, 0, Axis.Y),
+    WEST(-1, 0, 0, Axis.X),
+    UP(0, 0, 1, Axis.Z),
+    DOWN(0, 0, -1, Axis.Z);
 
     private static final ZDirection[] ONE_AXIS = {NORTH, EAST, SOUTH, WEST, UP, DOWN};
 
     public final int x;
     public final int y;
     public final int z;
+    @Nullable
+    public final Axis axis;
 
     /**
      * Returns the 6 directions that vary on a single axis of x, y, or z
@@ -72,5 +75,9 @@ public enum ZDirection {
             case WEST -> Direction.WEST;
             default -> throw new IllegalArgumentException("Invalid z direction: " + this);
         };
+    }
+
+    public enum Axis {
+        X, Y, Z
     }
 }

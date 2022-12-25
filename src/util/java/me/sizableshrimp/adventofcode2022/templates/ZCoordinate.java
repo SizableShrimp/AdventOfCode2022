@@ -106,6 +106,17 @@ public class ZCoordinate {
         return ZCoordinate.of(this.x - other.x, this.y - other.y, this.z - other.z);
     }
 
+    /**
+     * Returns the value on the z direction axis.
+     */
+    public int getAxis(ZDirection.Axis axis) {
+        return switch (axis) {
+            case X -> this.x;
+            case Y -> this.y;
+            case Z -> this.z;
+        };
+    }
+
     @Override
     public String toString() {
         return String.format("(%d,%d,%d)", x, y, z);

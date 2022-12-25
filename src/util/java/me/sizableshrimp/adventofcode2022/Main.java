@@ -23,6 +23,9 @@
 
 package me.sizableshrimp.adventofcode2022;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
 import me.sizableshrimp.adventofcode2022.helper.DataManager;
 import me.sizableshrimp.adventofcode2022.templates.Day;
 
@@ -31,7 +34,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -165,33 +167,29 @@ public class Main {
      * Runs and prints all days existing up to and including 25 and provides an estimate of the runtime.
      */
     public static void runAll() {
-        List<Day> days = new ArrayList<>(25);
-        for (int i = 0; i < 25; i++) {
+        Int2ObjectMap<Day> days = new Int2ObjectLinkedOpenHashMap<>(25);
+        ObjectSet<Int2ObjectMap.Entry<Day>> daysEntrySet = days.int2ObjectEntrySet();
+        for (int day = 1; day <= 25; day++) {
             try {
-                days.add(getDayConstructor(i).newInstance());
+                days.put(day, getDayConstructor(day).newInstance());
             } catch (ClassNotFoundException ignored) {
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        List<Day.TimedResult> results = new ArrayList<>(25);
-        long before = System.nanoTime();
-        for (Day value : days) {
-            // Have to print separately to not skew runtimes
-            results.add(value.runTimed());
-        }
-        long after = System.nanoTime();
-
+        float totalTimeTaken = 0.0F;
         System.out.println("All Days\n");
-        for (int i = 0; i < results.size(); i++) {
-            int day = i + 1;
-            Day.TimedResult result = results.get(i);
+        for (Int2ObjectMap.Entry<Day> entry : daysEntrySet) {
+            int day = entry.getIntKey();
+            Day.TimedResult result = entry.getValue().runTimed();
             System.out.println("Day " + day + ":");
             System.out.println("Part 1: " + result.part1());
             System.out.println("Part 2: " + result.part2());
-            System.out.printf("Completed in %.3fms%n%n", result.timeTaken() / 1_000_000f);
+            float timeTaken = result.timeTaken() / 1_000_000f;
+            totalTimeTaken += timeTaken;
+            System.out.printf("Completed in %.3fms%n%n", timeTaken);
         }
-        System.out.printf("Completed all days in %.3fms%n%n", (after - before) / 1_000_000f);
+        System.out.printf("Completed all days in %.3fms%n%n", totalTimeTaken);
     }
 }
