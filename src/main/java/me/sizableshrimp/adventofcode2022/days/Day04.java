@@ -52,9 +52,4 @@ public class Day04 extends Day {
 
         return Result.of(part1Count, part2Count);
     }
-
-    @Override
-    protected void parse() {
-
-    }
 }
