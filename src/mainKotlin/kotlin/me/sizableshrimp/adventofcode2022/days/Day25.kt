@@ -27,53 +27,16 @@ import me.sizableshrimp.adventofcode2022.templates.SeparatedDay
 
 // https://adventofcode.com/2022/day/25 - Full of Hot Air
 class Day25 : SeparatedDay() {
-    override fun part1() = convertToBalancedQuinary(this.lines.sumOf(::convertFromBalancedQuinary))
+    override fun part1() = this.lines.sumOf { l -> l.fold(0L) { acc, c -> 5 * acc + ("=-012".indexOf(c) - 2) } }
+        .let { d ->
+            generateSequence(d) { it / 5 + if (it % 5 >= 3) 1 else 0 }
+                .takeWhile { it != 0L }
+                .map { "012=-"[(it % 5).toInt()] }
+                .joinToString("").reversed()
+        }
 
     // No Part 2 :)
     override fun part2() = null
-
-    private fun convertFromBalancedQuinary(numStr: String): Long {
-        var num = 0L
-        var power = 1L
-
-        for (i in numStr.length - 1 downTo 0) {
-            num += power * when (numStr[i]) {
-                '2' -> 2
-                '1' -> 1
-                '0' -> 0
-                '-' -> -1
-                '=' -> -2
-                else -> throw IllegalStateException()
-            }
-            power *= 5
-        }
-
-        return num
-    }
-
-    private fun convertToBalancedQuinary(inputNum: Long): String {
-        var num = inputNum
-        val result = StringBuilder()
-
-        while (num > 0) {
-            val remainder = (num % 5).toInt()
-            num /= 5
-            if (remainder > 2) num++
-
-            result.insert(
-                0, when (remainder) {
-                    0 -> '0'
-                    1 -> '1'
-                    2 -> '2'
-                    3 -> '='
-                    4 -> '-'
-                    else -> throw IllegalStateException()
-                }
-            )
-        }
-
-        return result.toString()
-    }
 
     companion object {
         @JvmStatic
